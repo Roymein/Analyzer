@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.ow2.asm:asm-debug-all:5.0.3'
+    implementation project(":dex-ir")
+    implementation project(":dex-base-cmd")
+    implementation project(":dex-reader")
+    implementation project(":dex-reader-api")
+    implementation project(":dex-translator")
+    implementation project(":dex-smali")
+}

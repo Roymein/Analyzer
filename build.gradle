@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest {
+        archivesBaseName = "Dex2Jar"
+        attributes 'Main-Class': 'com.example.d2j.DexTranslator'
+        attributes 'Manifest-Version': '1.0.0'
+    }
+
+    from {
+        project.configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    implementation 'org.ow2.asm:asm:9.4'
+    implementation project(":dex-tools")
+    implementation project(":dex-base-cmd")
+}
+
+task cleanAll(type: Delete) {
+    for (final def eachProject in rootProject.allprojects) {
+        delete eachProject.buildDir
+    }
+}

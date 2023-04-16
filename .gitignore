@@ -1,0 +1,12 @@
+/.gradle/
+/.idea
+/build
+/out
+/dex-base-cmd/build
+/dex-ir/build
+/dex-reader/build
+/dex-reader-api/build
+/dex-smali/build/
+/dex-tools/build/
+/dex-translator/build
+/dex-writer/build

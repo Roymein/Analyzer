@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+archivesBaseName = "dex-ir"
+group 'org.example'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":dex-reader-api")
+}

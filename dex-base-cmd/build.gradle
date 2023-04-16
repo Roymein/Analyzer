@@ -1,0 +1,7 @@
+plugins {
+    id 'java'
+}
+
+archivesBaseName = "dex-base-cmd"
+group 'com.example'
+version '1.0.0-SNAPSHOT'

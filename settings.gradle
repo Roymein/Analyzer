@@ -1,0 +1,10 @@
+rootProject.name = 'DexAnalyzer'
+include 'dex-base-cmd'
+include 'dex-tools'
+include 'dex-reader'
+include 'dex-reader-api'
+include 'dex-translator'
+include 'dex-ir'
+include 'dex-smali'
+include 'dex-writer'
+
