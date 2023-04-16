@@ -1,4 +1,5 @@
 rootProject.name = 'DexAnalyzer'
+include 'cmd-processor'
 include 'dex-base-cmd'
 include 'dex-tools'
 include 'dex-reader'
@@ -7,4 +8,5 @@ include 'dex-translator'
 include 'dex-ir'
 include 'dex-smali'
 include 'dex-writer'
+include 'cmd-compiler'
 

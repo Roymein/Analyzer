@@ -94,7 +94,7 @@ public abstract class BaseCmd {
 
     }
 
-    static protected class Option implements Comparable<Option> {
+    private static class Option implements Comparable<Option> {
         public String argName = "arg";
         public String description;
         public Field field;
@@ -105,20 +105,20 @@ public abstract class BaseCmd {
 
         @Override
         public int compareTo(Option o) {
-            int result = s(this.opt, o.opt);
+            int result = compare(this.opt, o.opt);
             if (result == 0) {
-                result = s(this.longOpt, o.longOpt);
+                result = compare(this.longOpt, o.longOpt);
                 if (result == 0) {
-                    result = s(this.argName, o.argName);
+                    result = compare(this.argName, o.argName);
                     if (result == 0) {
-                        result = s(this.description, o.description);
+                        result = compare(this.description, o.description);
                     }
                 }
             }
             return result;
         }
 
-        private static int s(String a, String b) {
+        private static int compare(String a, String b) {
             if (a != null && b != null) {
                 return a.compareTo(b);
             } else if (a != null) {
@@ -134,13 +134,13 @@ public abstract class BaseCmd {
             StringBuilder sb = new StringBuilder();
             boolean havePrev = false;
             if (opt != null && opt.length() > 0) {
-            sb.append("-").append(opt);
+                sb.append("-").append(opt);
                 havePrev = true;
             }
             if (longOpt != null && longOpt.length() > 0) {
                 if (havePrev) {
-                sb.append(",");
-            }
+                    sb.append(",");
+                }
                 sb.append("--").append(longOpt);
             }
             return sb.toString();
@@ -193,13 +193,13 @@ public abstract class BaseCmd {
             BaseCmd baseCmd = (BaseCmd) clz.newInstance();
             baseCmd.doMain(newArgs);
         } else {
-            Method m = clz.getMethod("main",String[].class);
+            Method m = clz.getMethod("main", String[].class);
             m.setAccessible(true);
-            m.invoke(null, (Object)newArgs);
+            m.invoke(null, (Object) newArgs);
         }
     }
 
-    public void doMain(String... args) {
+    public void doMain(String[] args) {
         try {
             initOptions();
             parseSetArgs(args);
@@ -226,7 +226,7 @@ public abstract class BaseCmd {
         return options;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected Object convert(String value, Class type) {
         if (type.equals(String.class)) {
             return value;
@@ -295,7 +295,7 @@ public abstract class BaseCmd {
                 if ("".equals(opt.longOpt()) && "".equals(opt.opt())) {   // into autoMode
                     option.longOpt = fromCamel(f.getName());
                     if (f.getType().equals(boolean.class)) {
-                        option.hasArg=false;
+                        option.hasArg = false;
                         try {
                             if (f.getBoolean(this)) {
                                 throw new RuntimeException("the value of " + f + " must be false, as it is declared as no args");
@@ -307,6 +307,8 @@ public abstract class BaseCmd {
                     checkConflict(option, "--" + option.longOpt);
                     continue;
                 }
+
+                // boolean type field can hasArg = false, and value not false
                 if (!opt.hasArg()) {
                     if (!f.getType().equals(boolean.class)) {
                         throw new RuntimeException("the type of " + f
@@ -373,7 +375,7 @@ public abstract class BaseCmd {
     protected void initOptions() {
         initOptionFromClass(this.getClass());
     }
-    
+
     protected void parseSetArgs(String... args) throws IllegalArgumentException, IllegalAccessException {
         this.originalArgs = args;
         List<String> remainsOptions = new ArrayList<>();
