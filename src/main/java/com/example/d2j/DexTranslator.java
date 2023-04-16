@@ -3,7 +3,9 @@ package com.example.d2j;
 import java.io.File;
 import java.util.Objects;
 
-public class DexTranslator {
+@Syntax(cmd = "d2j-DexTranslator", syntax = "[options] <file0> [file1 ... fileN]", desc = "convert dex to jar")
+public class DexTranslator extends BaseCmd {
+
     private final String[] mArgs;
 
     public DexTranslator(String[] args) {
@@ -65,5 +67,10 @@ public class DexTranslator {
     public static void main(String[] args) {
         DexTranslator dexTranslator = new DexTranslator(args);
         dexTranslator.translate();
+    }
+
+    @Override
+    protected void doCommandLine() throws Exception {
+
     }
 }
