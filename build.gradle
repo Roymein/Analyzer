@@ -13,7 +13,7 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
         archivesBaseName = "Dex2Jar"
-        attributes 'Main-Class': 'com.example.d2j.DexTranslator'
+        attributes 'Main-Class': 'com.example.d2j.CmdHandler'
         attributes 'Manifest-Version': '1.0.0'
     }
 

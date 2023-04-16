@@ -2,6 +2,8 @@
 /.idea
 /build
 /out
+/cmd-compiler
+/cmd-processor
 /dex-base-cmd/build
 /dex-ir/build
 /dex-reader/build
