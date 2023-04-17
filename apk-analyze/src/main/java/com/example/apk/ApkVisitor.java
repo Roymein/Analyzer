@@ -23,10 +23,6 @@ public abstract class ApkVisitor {
 
     }
 
-    public void visit() {
-
-    }
-
     public void visitDex(File dexFile) {
 
     }
