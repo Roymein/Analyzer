@@ -1,4 +1,4 @@
-rootProject.name = 'DexAnalyzer'
+rootProject.name = 'Analyzer'
 include 'cmd-processor'
 include 'dex-base-cmd'
 include 'dex-tools'
