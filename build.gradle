@@ -51,6 +51,8 @@ allprojects {
 }
 
 task cleanAll(type: Delete) {
+    group "build"
+
     for (final def eachProject in rootProject.allprojects) {
         delete eachProject.buildDir
     }
