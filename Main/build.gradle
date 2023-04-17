@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+group 'com.example'
+version '1.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest {
+        archivesBaseName = "Analyze"
+        attributes 'Main-Class': 'com.example.analyze.CmdHandler'
+        attributes 'Manifest-Version': '1.0.0'
+    }
+
+    from {
+        project.configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+}
+
+dependencies {
+    implementation 'org.ow2.asm:asm:9.4'
+    implementation project(":apk-analyze")
+    implementation project(":dex-tools")
+    implementation project(":dex-reader")
+    implementation project(":dex-base-cmd")
+    implementation project(":xml-parser")
+
+    testImplementation 'junit:junit:4.13.2'
+}
