@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group 'com.example'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":dex-tools")
+    implementation project(":dex-reader")
+    implementation project(":dex-base-cmd")
+    implementation project(":xml-parser")
+    testImplementation 'junit:junit:4.13.2'
+}
