@@ -33,7 +33,9 @@ java {
 dependencies {
     implementation 'org.ow2.asm:asm:9.4'
     implementation project(":dex-tools")
+    implementation project(":dex-reader")
     implementation project(":dex-base-cmd")
+    testImplementation 'junit:junit:4.13.2'
 }
 
 task cleanAll(type: Delete) {

@@ -1,7 +1,7 @@
 package com.example.d2j;
 
-import com.example.d2j.ir.ET;
 import com.example.d2j.dex.Dex2jar;
+import com.example.d2j.ir.ET;
 import com.example.d2j.reader.BaseDexFileReader;
 import com.example.d2j.reader.DexFileReader;
 import com.example.d2j.reader.MultiDexFileReader;
@@ -93,9 +93,15 @@ public class Dex2jarCmd extends BaseCmd {
 
             BaseDexFileReader reader = MultiDexFileReader.open(Files.readAllBytes(new File(fileName).toPath()));
             BaksmaliBaseDexExceptionHandler handler = notHandleException ? null : new BaksmaliBaseDexExceptionHandler();
-            Dex2jar.from(reader).withExceptionHandler(handler).reUseReg(reuseReg).topoLogicalSort()
-                    .skipDebug(!debugInfo).optimizeSynchronized(this.optmizeSynchronized).printIR(printIR)
-                    .noCode(noCode).skipExceptions(skipExceptions).to(file);
+            Dex2jar.from(reader)
+                    .withExceptionHandler(handler)
+                    .reUseReg(reuseReg)
+                    .topoLogicalSort()
+                    .skipDebug(!debugInfo)
+                    .optimizeSynchronized(this.optmizeSynchronized)
+                    .printIR(printIR)
+                    .noCode(noCode).skipExceptions(skipExceptions)
+                    .to(file);
 
             if (!notHandleException) {
                 if (handler.hasException()) {
