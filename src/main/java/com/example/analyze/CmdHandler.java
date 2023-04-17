@@ -1,10 +1,10 @@
 package com.example.analyze;
 
-import com.example.analyze.cmd.ApkAnalyzerCmd;
-import com.example.analyze.cmd.ManifestParseCmd;
+import com.example.apk.ApkAnalyzerCmd;
 import com.example.d2j.BaseCmd;
 import com.example.d2j.Dex2jarCmd;
 import com.example.d2j.Syntax;
+import com.example.xml.ManifestParseCmd;
 
 import java.lang.reflect.Method;
 import java.util.*;

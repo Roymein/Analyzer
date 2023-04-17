@@ -2,8 +2,9 @@
 /.idea
 /build
 /out
-/cmd-compiler
-/cmd-processor
+/apk-analyze/build
+/cmd-compiler/build
+/cmd-processor/build
 /dex-base-cmd/build
 /dex-ir/build
 /dex-reader/build
@@ -12,3 +13,4 @@
 /dex-tools/build/
 /dex-translator/build
 /dex-writer/build
+/xml-parser/build

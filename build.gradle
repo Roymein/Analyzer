@@ -12,7 +12,7 @@ repositories {
 jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
-        archivesBaseName = "Dex2Jar"
+        archivesBaseName = "Analyze"
         attributes 'Main-Class': 'com.example.analyze.CmdHandler'
         attributes 'Manifest-Version': '1.0.0'
     }
@@ -32,9 +32,11 @@ java {
 
 dependencies {
     implementation 'org.ow2.asm:asm:9.4'
+    implementation project(":apk-analyze")
     implementation project(":dex-tools")
     implementation project(":dex-reader")
     implementation project(":dex-base-cmd")
+    implementation project(":xml-parser")
     testImplementation 'junit:junit:4.13.2'
 }
 
