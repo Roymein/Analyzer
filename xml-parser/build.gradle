@@ -10,6 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation project(":dex-base-cmd")
+    implementation project(":base-cmd")
     testImplementation 'junit:junit:4.13.2'
 }

@@ -31,7 +31,7 @@ dependencies {
     implementation project(":apk-analyze")
     implementation project(":dex-tools")
     implementation project(":dex-reader")
-    implementation project(":dex-base-cmd")
+    implementation project(":base-cmd")
     implementation project(":xml-parser")
 
     testImplementation 'junit:junit:4.13.2'
