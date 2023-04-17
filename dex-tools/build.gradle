@@ -5,6 +5,22 @@ plugins {
 group 'org.example'
 version '1.0-SNAPSHOT'
 
+jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest {
+        archivesBaseName = "dex-tools"
+        attributes 'Main-Class': 'com.example.d2j.Dex2jarCmd'
+        attributes 'Manifest-Version': '1.0.0'
+    }
+
+    from {
+        project.configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+}
+
 dependencies {
     implementation 'org.ow2.asm:asm-debug-all:5.2'
     implementation project(":dex-ir")
