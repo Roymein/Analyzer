@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class JarAnalyzer {
+public class Jar2ClassAnalyzer {
 
     public static Map<String, ClassReader> input(File jar) {
         Map<String, ClassReader> classes = new TreeMap<>();

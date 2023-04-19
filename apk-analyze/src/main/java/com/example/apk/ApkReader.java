@@ -53,7 +53,7 @@ public class ApkReader {
                     e.printStackTrace();
                 }
 
-                Map<String, ClassReader> classReaderMap = JarAnalyzer.input(jarFile);
+                Map<String, ClassReader> classReaderMap = Jar2ClassAnalyzer.input(jarFile);
                 for (Map.Entry<String, ClassReader> entry : classReaderMap.entrySet()) {
                     ClassReader classReader = entry.getValue();
                     classReader.accept(classVisitor, 0);
