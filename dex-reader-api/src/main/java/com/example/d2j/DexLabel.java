@@ -8,9 +8,7 @@ public class DexLabel {
     private int offset = -1;
 
     /**
-     * 
-     * @param offset
-     *            the offset of the label
+     * @param offset the offset of the label
      */
     public DexLabel(int offset) {
         super();

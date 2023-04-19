@@ -1,9 +1,12 @@
 package com.example.apk;
 
+import com.example.apk.visitor.ClassAnalyzerVisitor;
 import com.example.d2j.BaseCmd;
 import com.example.d2j.Opt;
 import com.example.d2j.Syntax;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Syntax(cmd = "ApkAnalyzer", syntax = "[options] <file0> [file1 ... fileN]", desc = "convert dex to jar")
@@ -21,6 +24,11 @@ public class ApkAnalyzerCmd extends BaseCmd {
 
     @Override
     protected void doCommandLine() throws Exception {
-//        Dex2jarCmd.main(inputJar, "--output", outputJar, "--force");
+        for (String remainingArg : remainingArgs) {
+            Path file = new File(remainingArg).toPath();
+            byte[] bytes = Files.readAllBytes(file);
+            ApkReader apkReader = new ApkReader(bytes);
+            apkReader.accept(new ClassAnalyzerVisitor());
+        }
     }
 }

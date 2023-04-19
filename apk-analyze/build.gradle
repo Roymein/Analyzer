@@ -26,5 +26,6 @@ dependencies {
     implementation project(":dex-reader")
     implementation project(":base-cmd")
     implementation project(":xml-parser")
+    implementation 'org.ow2.asm:asm-debug-all:5.2'
     testImplementation 'junit:junit:4.13.2'
 }

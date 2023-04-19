@@ -1,49 +1,105 @@
 package com.example.apk;
 
+import com.example.d2j.Dex2jarCmd;
 import com.example.d2j.util.zip.ZipEntry;
 import com.example.d2j.util.zip.ZipFile;
-import com.example.xml.XmlParser;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
+import java.io.*;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ApkReader {
-    private static final String ANDROID_MANIFEST = "AndroidManifest.xml";
-    private InputStream androidManifestXmlStream;
+    private static final String DIR_ROOT = "analyze";
+    private static final String DIR_APK_ZIP_ENTRY = "gen";
+    private static final String DIR_OUTPUT = "output";
 
-    public ApkReader(File apkFile) {
-        try {
-            byte[] bytes = Files.readAllBytes(apkFile.toPath());
-            try (ZipFile zipFile = new ZipFile(bytes)) {
-                androidManifestXmlStream = findAndroidManifest(zipFile);
+    private static final String DEX_SUFFIX = ".dex";
 
+    private final File apkDepressDir = new File(DIR_ROOT, DIR_APK_ZIP_ENTRY);
+    private final File outDir = new File(DIR_ROOT, DIR_OUTPUT);
+
+    private final byte[] mBytes;
+    private final Map<File, File> fileTempMap = new TreeMap<>();
+    private final Map<String, ClassReader> classes = new TreeMap<>();
+
+    /**
+     * byte[] bytes = Files.readAllBytes(apkFile.toPath());
+     */
+    public ApkReader(byte[] bytes) {
+        this.mBytes = bytes;
+    }
+
+    /**
+     * //todo modify ClassVisitor
+     *
+     * @param classVisitor
+     */
+    public void accept(final ClassVisitor classVisitor) {
+        apkDecompress();
+        analyzeCode(classVisitor);
+    }
+
+    private void analyzeCode(ClassVisitor classVisitor) {
+        for (Map.Entry<File, File> fileFileEntry : fileTempMap.entrySet()) {
+            File zipTempFile = fileFileEntry.getKey();
+            File jarFile = fileFileEntry.getValue();
+            if (zipTempFile.getName().endsWith(DEX_SUFFIX)) {
+                try {
+                    Dex2jarCmd.main(zipTempFile.getAbsolutePath(), "--output", jarFile.getAbsolutePath(), "--force");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                Map<String, ClassReader> classReaderMap = JarAnalyzer.input(jarFile);
+                for (Map.Entry<String, ClassReader> entry : classReaderMap.entrySet()) {
+                    ClassReader classReader = entry.getValue();
+                    classReader.accept(classVisitor, 0);
+                }
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
         }
     }
 
-    public ApkReader(InputStream inputStream) {
-        try {
-            byte[] bytes = inputStream.readAllBytes();
-            try (ZipFile zipFile = new ZipFile(bytes)) {
-                androidManifestXmlStream = findAndroidManifest(zipFile);
-                XmlParser xmlParser = new XmlParser(androidManifestXmlStream);
-                xmlParser.parse();
-            }
-        } catch (IOException ioException) {
+    private void apkDecompress() {
+        Path currentDir = new File(".").toPath();
+        try (ZipFile apkZipFile = new ZipFile(mBytes)) {
+            for (ZipEntry apkEntry : apkZipFile.entries()) {
+                String apkEntryName = apkEntry.getName();
+                File entryFile = new File(apkDepressDir, apkEntryName);
+                File targetFile = null;
+                if (apkEntryName.endsWith(DEX_SUFFIX)) {
+                    targetFile = currentDir.resolve(new File(apkDepressDir, getBaseName(apkEntryName) + "-dex2jar.jar").toPath()).toFile();
+                } else {
+                    targetFile = entryFile;
+                }
 
+                fileTempMap.put(entryFile, targetFile);
+
+                File parentFile = entryFile.getParentFile();
+                if (!parentFile.exists()) {
+                    parentFile.mkdirs();
+                }
+                if (entryFile.createNewFile()) {
+                    try (InputStream inputStream = apkZipFile.getInputStream(apkEntry);
+                         FileOutputStream fileOutputStream = new FileOutputStream(entryFile)) {
+                        int rc;
+                        byte[] bytes = new byte[32768];
+                        while ((rc = inputStream.read(bytes)) > 0) {
+                            fileOutputStream.write(bytes, 0, rc);
+                        }
+                    } catch (FileNotFoundException fileNotFoundException) {
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public void accept(final ApkVisitor apkVisitor) {
-
-    }
-
-    private InputStream findAndroidManifest(ZipFile zipFile) {
-        ZipEntry entry = zipFile.findFirstEntry(ANDROID_MANIFEST);
-        return entry == null ? null : zipFile.getInputStream(entry);
+    private String getBaseName(String fn) {
+        int x = fn.lastIndexOf('.');
+        return x >= 0 ? fn.substring(0, x) : fn;
     }
 }
