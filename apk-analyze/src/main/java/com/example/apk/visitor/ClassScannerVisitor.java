@@ -5,10 +5,10 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-public class ClassAnalyzerVisitor extends ClassVisitor {
+public class ClassScannerVisitor extends ClassVisitor {
     private String className;
 
-    public ClassAnalyzerVisitor() {
+    public ClassScannerVisitor() {
         super(Opcodes.ASM5);
     }
 

@@ -1,6 +1,6 @@
 package com.example.analyze;
 
-import com.example.apk.ApkAnalyzerCmd;
+import com.example.apk.ApkDexAnalyzer;
 import com.example.d2j.BaseCmd;
 import com.example.d2j.Dex2jarCmd;
 import com.example.d2j.Syntax;
@@ -13,7 +13,7 @@ public class CmdHandler {
     private static final String METHOD_NAME = "main";
     private final List<Class<? extends BaseCmd>> commands = new ArrayList<>(Arrays.asList(
             Dex2jarCmd.class,
-            ApkAnalyzerCmd.class,
+            ApkDexAnalyzer.class,
             ManifestParseCmd.class
     ));
 

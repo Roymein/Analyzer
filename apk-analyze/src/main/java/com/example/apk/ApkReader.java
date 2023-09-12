@@ -12,33 +12,22 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class ApkReader {
-    private static final String DIR_ROOT = "analyze";
-    private static final String DIR_APK_ZIP_ENTRY = "gen";
-    private static final String DIR_OUTPUT = "output";
-
+    private static final String DETAILS = "detail";
     private static final String DEX_SUFFIX = ".dex";
 
-    private final File apkDepressDir = new File(DIR_ROOT, DIR_APK_ZIP_ENTRY);
-    private final File outDir = new File(DIR_ROOT, DIR_OUTPUT);
-
-    private final byte[] mBytes;
     private final Map<File, File> fileTempMap = new TreeMap<>();
-    private final Map<String, ClassReader> classes = new TreeMap<>();
+    private final byte[] mBytes;
+    private final String mApkFileName;
+    private final File mOutputDir;
 
-    /**
-     * byte[] bytes = Files.readAllBytes(apkFile.toPath());
-     */
-    public ApkReader(byte[] bytes) {
-        this.mBytes = bytes;
+    public ApkReader(String apkFileName, byte[] bytes, File outDir) {
+        mApkFileName = apkFileName;
+        mBytes = bytes;
+        mOutputDir = outDir;
     }
 
-    /**
-     * //todo modify ClassVisitor
-     *
-     * @param classVisitor
-     */
     public void accept(final ClassVisitor classVisitor) {
-        apkDecompress();
+        tranDex2Jar(mOutputDir);
         analyzeCode(classVisitor);
     }
 
@@ -62,7 +51,12 @@ public class ApkReader {
         }
     }
 
-    private void apkDecompress() {
+    private void tranDex2Jar(File outDir) {
+        final File detailDir = new File(outDir, DETAILS);
+        if (!detailDir.exists()) {
+            detailDir.mkdirs();
+        }
+        File apkDepressDir = new File(detailDir, mApkFileName);
         Path currentDir = new File(".").toPath();
         try (ZipFile apkZipFile = new ZipFile(mBytes)) {
             for (ZipEntry apkEntry : apkZipFile.entries()) {
@@ -72,7 +66,7 @@ public class ApkReader {
                 if (apkEntryName.endsWith(DEX_SUFFIX)) {
                     targetFile = currentDir.resolve(new File(apkDepressDir, getBaseName(apkEntryName) + "-dex2jar.jar").toPath()).toFile();
                 } else {
-                    targetFile = entryFile;
+                    continue;
                 }
 
                 fileTempMap.put(entryFile, targetFile);

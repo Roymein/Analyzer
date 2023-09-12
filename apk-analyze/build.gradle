@@ -9,7 +9,7 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
         archivesBaseName = "apk-analyze"
-        attributes 'Main-Class': 'com.example.apk.ApkAnalyzerCmd'
+        attributes 'Main-Class': 'com.example.apk.ApkDexAnalyzer'
         attributes 'Manifest-Version': '1.0.0'
     }
 
